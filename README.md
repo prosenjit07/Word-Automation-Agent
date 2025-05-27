@@ -86,6 +86,10 @@ word_automation_app/
 - Applies the same tracked changes to the Chinese document by inserting `<w:ins>` and `<w:del>` tags
 - Repackages the modified XML as a new DOCX
 
+## Tracking
+![image](https://github.com/user-attachments/assets/3e4e19ee-c818-4a3a-94e8-a8a2b42449e8)
+
+
 ## Limitations
 - Only supports 1-to-1 paragraph alignment (no fuzzy matching yet)
 - Inserts placeholder text for changes in Chinese (not the actual translated content)
