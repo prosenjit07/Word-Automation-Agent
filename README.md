@@ -1,6 +1,59 @@
-# WordAutomation
+# Word Document Automation
 
-Automatically transfer tracked changes from an English Word document to its Chinese translation, preserving Microsoft Word's Track Changes formatting.
+This application helps synchronize changes between English and Chinese Word documents.
+
+## Setup
+
+1. Create a virtual environment and install dependencies:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Input Requirements
+
+Place your input files in the `input_docs` directory:
+
+1. `english_updated.docx`: The English document with tracked changes
+   - Must be a Word document (.docx)
+   - Should contain tracked changes (revisions) that you want to apply to the Chinese version
+
+2. `chinese_original.docx`: The original Chinese document
+   - Must be a Word document (.docx)
+   - Should be the base document that will be updated with changes
+
+## Running the Application
+
+1. Ensure your input files are in place:
+   ```
+   input_docs/
+   ├── english_updated.docx
+   └── chinese_original.docx
+   ```
+
+2. Run the application:
+   ```bash
+   python main.py
+   ```
+
+3. The updated Chinese document will be generated in:
+   ```
+   output_docs/chinese_updated.docx
+   ```
+
+## Directory Structure
+
+- `input_docs/`: Place your input Word documents here
+- `output_docs/`: Generated output files will appear here
+- `eng_xml/`: Temporary directory for English document XML (automatically created)
+- `chi_xml/`: Temporary directory for Chinese document XML (automatically created)
+
+## Notes
+
+- Make sure to enable "Track Changes" in your English document before making edits
+- The application uses fuzzy matching to align segments between English and Chinese
+- Temporary XML files are generated during processing and can be safely deleted
 
 ## Features
 - Extracts insertions and deletions (tracked changes) from an English `.docx` file
@@ -25,22 +78,6 @@ word_automation_app/
 ├── output_docs/
 │   └── chinese_updated.docx
 ```
-
-## Setup
-1. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Prepare input files:**
-   - Place your English DOCX with tracked changes in `input_docs/english_updated.docx`
-   - Place the original Chinese translation in `input_docs/chinese_original.docx`
-
-## Usage
-Run the main script:
-```bash
-python main.py
-```
-- The output will be saved as `output_docs/chinese_updated.docx` with visible tracked changes.
 
 ## How It Works
 - Extracts tracked changes from the English document using XML parsing

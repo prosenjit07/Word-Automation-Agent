@@ -27,13 +27,17 @@ def main():
     # 2. Extract Chinese paragraphs
     chi_paras, chi_tree, ns = extract_chinese_paragraphs(chi_docx, chi_xml_dir)
 
-    # 3. Align segments
-    alignment = match_segments([c['para_idx'] for c in changes], list(range(len(chi_paras))))
+    # 3. Extract English paragraphs for alignment
+    from extract_changes import get_paragraphs_from_xml
+    eng_paras, _, _ = get_paragraphs_from_xml(os.path.join(eng_xml_dir, 'word/document.xml'))
 
-    # 4. Apply changes to Chinese XML
+    # 4. Align segments using fuzzy matching
+    alignment = match_segments(eng_paras, chi_paras)
+
+    # 5. Apply changes to Chinese XML
     apply_changes_to_chinese(changes, chi_paras, alignment)
 
-    # 5. Save and repack Chinese DOCX
+    # 6. Save and repack Chinese DOCX
     chi_tree.write(os.path.join(chi_xml_dir, 'word/document.xml'), xml_declaration=True, encoding='utf-8')
     repack_docx(chi_xml_dir, output_docx)
 

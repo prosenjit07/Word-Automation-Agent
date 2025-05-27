@@ -15,10 +15,23 @@ def get_paragraphs_from_xml(xml_path):
 def find_tracked_changes(paragraphs, ns):
     changes = []
     for idx, p in enumerate(paragraphs):
+        # Check for direct ins/del tags
         for ins in p.xpath('.//w:ins', namespaces=ns):
             changes.append({'type': 'ins', 'para_idx': idx, 'xml': etree.tostring(ins)})
         for dele in p.xpath('.//w:del', namespaces=ns):
             changes.append({'type': 'del', 'para_idx': idx, 'xml': etree.tostring(dele)})
+            
+        # Check for revision markup
+        for run in p.xpath('.//w:r', namespaces=ns):
+            revision = run.xpath('.//w:revision', namespaces=ns)
+            if revision:
+                rev_type = revision[0].get('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}type')
+                if rev_type in ['ins', 'del']:
+                    changes.append({
+                        'type': rev_type,
+                        'para_idx': idx,
+                        'xml': etree.tostring(run)
+                    })
     return changes
 
 def extract_changes(eng_docx_path, extract_dir):
